@@ -1,13 +1,122 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+* {
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  font-family: 'Roboto', sans-serif;
+  height: 100vh;
+  background: linear-gradient(#fab35c, #ED8F03);
+}
+
+.todo_list {
+  list-style: none;
+  padding: 0;
+}
+
+.todo_item {
+  display: flex;
+  justify-content: space-between;
+  min-height: 45px;
+  margin: 10px 0;
+  padding: 10px 15px;
+  background-color: #fff;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: 400;
+  cursor: grab;
+}
+
+.done span {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  color:  rgb(172, 172, 172);
+  font-weight: 300;
+}
+
+.search {
+  display: flex;
+  margin-bottom: 40px;
+}
+
+input {
+  width: 100%;
+  height: 45px;
+  margin-right: 20px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  font-size: 20px;
+  outline: none;
+}
+
+form {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+form button {
+  width: 120px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+}
+
+button {
+  cursor: pointer;
+  outline: none;
+  border-radius: 6px;
+}
+
+.filter_btns {
+  display: flex;
+  background-color: #2C5364;
+  border-radius: 10px;
+}
+
+.search button {
+  border: none;
+  padding: 0 15px;
+  color: #fff;
+  font-size: 18px;
+}
+
+.active_btn {
+  background-color: #338bff;
+}
+
+.btn {
+  background-color: #2C5364;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.action_btn {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  font-size: 19px;
+}
+
+.action_btn .fa-star {
+  color: rgb(172, 172, 172);
+}
+
+.action_btn .fa-check-square {
+  color:  #338bff;
+  font-size: 22px;
+  margin-top: 1px;
+}
+
+.action_btn .fa-trash-alt {
+  color: rgb(204, 12, 12);
+}
+
+.important .fa-star, .important .task_label {
+  color: #FF4B2B;
 }
