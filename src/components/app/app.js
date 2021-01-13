@@ -7,16 +7,16 @@ import './app.css';
 
 export default class App extends Component {
 
-    // state = {
-    //     data: [
-    //         {label: 'Feed the Cat', important: false, done: false, id: 1, order: 1},
-    //         {label: 'Cook dinner', important: false, done: false, id: 2, order: 2},
-    //         {label: 'Do the laundry', important: false, done: false, id: 3, order: 3}
-    //     ],
-    //     currentCard: null,
-    //     term: '',
-    //     filter: 'all'
-    // }
+    state = {
+        data: [
+            {label: 'Feed the Cat', important: false, done: false, order: 1, id: 1},
+            {label: 'Cook dinner', important: false, done: false, order: 2, id: 2},
+            {label: 'Do the laundry', important: false, done: false, order: 3, id: 3}
+        ],
+        currentCard: null,
+        term: '',
+        filter: 'all'
+    }
 
     onToggleImportant = (id) => {
         this.setState(this.state.data.map((item) => {
@@ -54,6 +54,7 @@ export default class App extends Component {
             label: body,
             important: false,
             done: false,
+            order: 1
         }
 
         let keys = [];
@@ -76,6 +77,7 @@ export default class App extends Component {
             if (key === getId) {
                 getId();
             } else {
+                newTask.order = ++newTask.order;
                 newTask.id = getId().replace(/^0/, '');
             }
         });
@@ -111,56 +113,52 @@ export default class App extends Component {
     }
 
     onFilterSelect = (filter) => {
-        console.log(filter);
         this.setState({filter});
     }
 
-    ////////////////////////////////
-    state = {
-        data: [
-            {label: 'Feed the Cat', important: false, done: false, id: 1, order: 1},
-            {label: 'Cook dinner', important: false, done: false, id: 2, order: 2},
-            {label: 'Do the laundry', important: false, done: false, id: 3, order: 3}
-        ],
-        currentCard: null,
-        term: '',
-        filter: 'all'
-    }
-
     dragStartHandler = (e, card) => {
-        // console.log('dragStart', card);
+        console.log('dragStart', card);
+
         this.setState({
             currentCard: card
         })
     }
 
     dragEndHandler = (e) => {
-        // console.log('dragEnd');
         e.target.style.background = '#fff';
+        e.target.style.borderRadius = '6px';
     }
 
     dragOverHandler = (e) => {
         e.preventDefault();
-        // console.log('');
-        // e.target.style.background = 'lightgray';
+        e.target.style.background = 'lightgray';
+        e.target.style.borderRadius = '6px';
     }
 
     dropHandler = (e, card) => {
         e.preventDefault();
-        // console.log('drop', card);
-        const {data, currentCard} = this.state;
-        this.setState(data.sort(this.sortCards).map(c => {
-            if (c.id === currentCard.id) {
-                // return {...c, order: currentCard.order}
-                return c.order = currentCard.order
+        console.log('drop', card);
+
+        const {currentCard} = this.state;
+        
+        this.setState(({data}) => {
+            const newData = data.map((c) => {
+                if (c.id === card.id) {
+                    return {...c, order: currentCard.order}
+                }
+    
+                if (c.id === currentCard.id) {
+                    return {...c, order: card.order}
+                }
+                return c
+            });
+            return {
+                data: newData
             }
-            if (c.id === currentCard.id) {
-                // return {...c, order: card.order}
-                return c.order = card.order
-            }
-            return c
-        }));
+        });
+
         e.target.style.background = '#fff';
+        e.target.style.borderRadius = '6px';
     }
 
     sortCards = (a, b) => {
@@ -170,14 +168,11 @@ export default class App extends Component {
             return -1
         }
     };
-    ///////////////////////////////////
 
     render() {
         const {data, term, filter} = this.state;
-        const shownTasks = this.filterTask(this.searchTask(data, term), filter);
+        const shownTasks = this.filterTask(this.searchTask(data, term), filter).sort(this.sortCards);
         // console.log(shownTasks);
-        const sortedShownTasks = shownTasks.sort(this.sortCards);
-        // console.log(sortedShownTasks);
 
         return (
             <div className="container">
@@ -187,7 +182,7 @@ export default class App extends Component {
                     filter={filter}
                     onFilterSelect={this.onFilterSelect}/>
                 <List
-                    tasks={sortedShownTasks}
+                    tasks={shownTasks}
                     onToggleImportant={this.onToggleImportant}
                     onDoneTask={this.onDoneTask}
                     onDeleteTask={this.onDeleteTask}
